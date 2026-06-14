@@ -2,6 +2,7 @@ return {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     dependencies = {
+      "nvim-treesitter/nvim-treesitter",
       'nvim-lua/plenary.nvim',
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make"
@@ -10,6 +11,13 @@ return {
       require("telescope").setup({
         defaults = {
           previewer = true,
+        -- Add this section to disable filetype detection in previews
+        previewers = {
+          buffer_previewer_maker = function(filepath, bufnr, opts)
+            opts.use_ft_detect = false -- Disable filetype detection for preview
+            return require("telescope.previewers.buffer_previewer").new(filepath, bufnr, opts)
+          end,
+        },
           file_ignore_patterns = {
             "^tmp/*",
             "^.git/",
